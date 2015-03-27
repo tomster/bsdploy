@@ -1,6 +1,7 @@
 2.1.y - Unreleased
 ==================
 
+- [fix] import existing zpool in ``zpool`` ansible module if the name matches
 - [fix] try to attach geli device first in ``zpool`` ansible module, in case it already exists, only if that fails create it from scratch
 - [fix] properly handle multiple geli encrypted devices in ``zpool`` ansible module
 - [feature] files copied during bootstrap can be encrypted using the ``ploy vault`` commands. This is useful for the private ssh host keys in ``bootstrap-files``.
