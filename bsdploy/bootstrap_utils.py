@@ -314,7 +314,7 @@ class BootstrapUtils:
         run(self.env_vars + chroot_prefix + 'pkg update', shell=False)
 
         if packages:
-            run(self.env_vars + chroot_prefix + 'pkg install %s' % ' '.join(packages), shell=False)
+            run(self.env_vars + chroot_prefix + 'pkg install -U %s' % ' '.join(packages), shell=False)
 
     @lazy
     def mounts(self):
