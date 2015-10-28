@@ -115,24 +115,12 @@
 - name: Create pkg cache folder
   file: dest=/var/cache/pkg/All/ state=directory owner=root group=wheel
 
-# TODO: is this still necessary?
-- name: Download pkg.txz using proxy
-  get_url: dest=/var/cache/pkg/All/pkg.txz url={{ pkg_txz_url }}
-  when: ploy_http_proxy is defined
-  environment:
-    http_proxy: "{{ploy_http_proxy}}"
-    https_proxy: "{{ploy_http_proxy}}"
-
-- name: Download pkg.txz
-  get_url: dest=/var/cache/pkg/All/pkg.txz url={{ pkg_txz_url }}
-  when: ploy_http_proxy is not defined
+#
+# configure bsdploy_base flavour
+#
 
 - name: Directory for jail flavour "bsdploy_base"
   file: dest=/usr/jails/flavours/bsdploy_base state=directory owner=root group=wheel
-
-- name: Pkg in bsdploy_base flavour
-  command: "tar -x -C /usr/jails/flavours/bsdploy_base --chroot --exclude '+*' -f /var/cache/pkg/All/pkg.txz creates=/usr/jails/flavours/bsdploy_base/usr/local/sbin/pkg"
-
 - name: The .ssh directory for root in bsdploy_base flavour
   file:
     dest: "/usr/jails/flavours/bsdploy_base/{{ploy_root_home_path}}/.ssh"
@@ -140,22 +128,14 @@
     mode: "0600"
     owner: "{{ploy_root_user_name}}"
     group: wheel
-
 - name: The etc directory in bsdploy_base flavour
   file: dest=/usr/jails/flavours/bsdploy_base/etc state=directory owner=root group=wheel
 - name: The etc/ssh directory in bsdploy_base flavour
   file: dest=/usr/jails/flavours/bsdploy_base/etc/ssh state=directory owner=root group=wheel
-
 - copy: src=make.conf dest=/usr/jails/flavours/bsdploy_base/etc/make.conf owner=root group=wheel
 - file: dest=/usr/jails/flavours/bsdploy_base/usr/local/etc/pkg/repos state=directory owner=root group=wheel
 - template: src=pkg.conf dest=/usr/jails/flavours/bsdploy_base/usr/local/etc/pkg.conf owner=root group=wheel
 - template: src=FreeBSD.conf dest=/usr/jails/flavours/bsdploy_base/usr/local/etc/pkg/repos/FreeBSD.conf owner=root group=wheel
-
-
-#
-# configure bsdploy_base flavour
-#
-
 - name: rc.conf for bsdploy_base flavour
   copy: src=base_flavour_rc.conf dest=/usr/jails/flavours/bsdploy_base/etc/rc.conf owner=root group=wheel
 - name: sshd_config for bsdploy_base flavour
